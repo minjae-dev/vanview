@@ -1,6 +1,10 @@
+import Navbar from "@/components/ui/Navbar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+// If you have a ClientWrapper component, import it here:
+import ClientWrapper from "@/components/auth/ClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     <body
+      <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning // Add this line
+        suppressHydrationWarning
       >
-        {children}
+        <ClientWrapper>
+          <Navbar />
+          {children}
+        </ClientWrapper>
       </body>
     </html>
   );

@@ -46,6 +46,14 @@ export class AuthController {
     return { message: 'Login successful' };
   }
 
+  @Post('logout')
+  async logout(
+    @Res({ passthrough: true }) res: any,
+  ): Promise<{ message: string }> {
+    res.clearCookie('jwt', { path: '/' });
+    return { message: 'Logout successful' };
+  }
+
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
