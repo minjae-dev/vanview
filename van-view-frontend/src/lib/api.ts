@@ -6,6 +6,7 @@ export const registerUser = async (data: RegisterInput) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include', // 쿠키를 포함하도록 설정
     body: JSON.stringify(data),
   });
   console.log(response)
@@ -23,6 +24,7 @@ export const loginUser = async (data: LoginInput) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include', // 쿠키를 포함하도록 설정
     body: JSON.stringify(data),
   });
 
@@ -32,5 +34,4 @@ export const loginUser = async (data: LoginInput) => {
 
   return response.json();
 }
-
 

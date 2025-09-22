@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
@@ -11,17 +10,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new Error('JWT_SECRET is not defined in the configuration');
     }
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => {
+          if (!req.cookies) return null; // req.cookies 객체 존재 확인
+          return req.cookies['jwt'] ?? null; // 올바른 쿠키 이름 사용
+        }
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtSecret,
     });
   }
 
   async validate(payload: any) {
-        console.log('JWT Payload:', payload);
-        const user = { id: payload.id, email: payload.email };
-        console.log('Validated User:', user);
-
     return { id: payload.id, email: payload.email };
   }
 }

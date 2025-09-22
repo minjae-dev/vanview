@@ -24,7 +24,8 @@ export default function LoginForm() {
 
     try {
       const response = await loginUser(data);
-      if (!response.token) {
+      console.log(response)
+      if (!response.message) {
         const error = await response.json();
         setServerError(error.message);
       } else {

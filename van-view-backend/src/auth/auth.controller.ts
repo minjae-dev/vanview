@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCookieAuth } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -30,14 +30,26 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<{ token: string }> {
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) res: any,
+  ): Promise<{ message: string }> {
     const token = await this.authService.login(loginDto);
-    return { token };
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day ',
+      path: '/',
+    });
+
+    return { message: 'Login successful' };
   }
 
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth('access-token') // Matches the name from DocumentBuilder
+  @ApiBearerAuth('access-token')
+  @ApiCookieAuth('jwt')
   async getProfile(@Req() req): Promise<{ email: string }> {
     console.log('req.user:', req.user);
     const user = await this.userService.findByEmail(req.user.email);
