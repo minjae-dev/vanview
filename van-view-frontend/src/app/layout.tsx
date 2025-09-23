@@ -1,4 +1,5 @@
 import Navbar from "@/components/ui/Navbar";
+import "leaflet/dist/leaflet.css"; // Leaflet CSS 임포트
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
