@@ -36,15 +36,16 @@ export class AuthService {
 
   async socialLogin(userData: {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     provider: string;
   }): Promise<string> {
     let user = await this.userService.findByEmail(userData.email);
     if (!user) {
       user = await this.userService.createUser({
-        email: user.email,
-        firstName: userData.name,
-        password: '', // No password for social login
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
         provider: '', // No provider for social login
       });
     }

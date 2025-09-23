@@ -72,12 +72,15 @@ export class AuthController {
   async githubAuth(@Req() req) {}
 
   @Get('github/callback')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(AuthGuard('github'))
   async githubAuthCallback(
     @Req() req: any,
     @Res() res: any,
   ): Promise<{ message: string }> {
     const user = req.user;
+    if (!user) {
+      throw new Error('GitHub OAuth failed: No user data received');
+    }
     const token = await this.authService.socialLogin(user);
     res.cookie('jwt', token, {
       httpOnly: true,
@@ -100,6 +103,9 @@ export class AuthController {
     @Res() res: any,
   ): Promise<{ message: string }> {
     const user = req.user;
+    if (!user) {
+      throw new Error('Google OAuth failed: No user data received');
+    }
     const token = await this.authService.socialLogin(user);
     res.cookie('jwt', token, {
       httpOnly: true,
