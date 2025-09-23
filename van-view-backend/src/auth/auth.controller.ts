@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiCookieAuth } from '@nestjs/swagger';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
@@ -59,7 +59,6 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @ApiCookieAuth('jwt')
   async getProfile(@Req() req): Promise<{ email: string }> {
-    console.log('req.user:', req.user);
     const user = await this.userService.findByEmail(req.user.email);
     if (!user) {
       throw new Error('User not found');
@@ -84,10 +83,11 @@ export class AuthController {
     const token = await this.authService.socialLogin(user);
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       sameSite: 'lax',
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
       path: '/',
+      domain: 'localhost',
     });
     return res.redirect('http://localhost:3000/dashboard'); // Redirect to your frontend URL
   }
@@ -106,14 +106,20 @@ export class AuthController {
     if (!user) {
       throw new Error('Google OAuth failed: No user data received');
     }
-    const token = await this.authService.socialLogin(user);
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-      path: '/',
-    });
-    return res.redirect('http://localhost:3000/dashboard'); // Redirect to your frontend URL
+
+    try {
+      const token = await this.authService.socialLogin(user);
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        path: '/',
+        domain: 'localhost',
+      });
+      return res.redirect('http://localhost:3000/dashboard'); // Redirect to your frontend URL
+    } catch (error) {
+      console.error('OAuth callback error:', error);
+    }
   }
 }

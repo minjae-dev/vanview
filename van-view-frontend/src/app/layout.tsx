@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// If you have a ClientWrapper component, import it here:
 import ClientWrapper from "@/components/auth/ClientWrapper";
 
 const geistSans = Geist({

@@ -12,7 +12,6 @@ export const registerUser = async (data: RegisterInput) => {
       body: JSON.stringify(data),
     }
   );
-  console.log(response);
 
   if (!response.ok) {
     return response;

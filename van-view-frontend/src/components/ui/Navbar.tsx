@@ -14,12 +14,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false)
   
   useEffect(() => {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get("jwt");
       setLoggedIn(!!token);
   }, []);    
 
   const handleLogout = async () => {
-    Cookies.remove("access_token");
+    Cookies.remove("jwt");
     setLoggedIn(false);
     await logout()
     router.push('/login');

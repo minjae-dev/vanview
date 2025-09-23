@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 @Injectable()
 export class AuthService {
@@ -36,17 +36,16 @@ export class AuthService {
 
   async socialLogin(userData: {
     email: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     provider: string;
   }): Promise<string> {
     let user = await this.userService.findByEmail(userData.email);
     if (!user) {
       user = await this.userService.createUser({
         email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        provider: '', // No provider for social login
+        firstName: userData.name,
+        password: '',
+        provider: userData.provider,
       });
     }
     return this.jwtService.sign({ id: user.id, email: user.email });

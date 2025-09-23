@@ -12,9 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req) => {
-          if (!req.cookies) return null; // req.cookies 객체 존재 확인
-          return req.cookies['jwt'] ?? null; // 올바른 쿠키 이름 사용
-        }
+          if (!req.cookies) return null;
+          return req.cookies['jwt'] ?? null;
+        },
       ]),
       ignoreExpiration: false,
       secretOrKey: jwtSecret,

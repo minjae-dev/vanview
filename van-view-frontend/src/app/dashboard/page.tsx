@@ -13,8 +13,6 @@ export default async function DashBoard() {
     redirect("/login");
   }
 
-  console.log(cookieHeader);
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/profile`, {
     headers: {
       Cookie: cookieHeader,

@@ -29,7 +29,6 @@ export default function RegisterForm() {
     setServerError('');
 
     try {
-      console.log('Submitting form data:', data);
       const apiData = {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -42,8 +41,6 @@ export default function RegisterForm() {
         const error = await response.json();
         setServerError(error.message);
       } else {
-        console.log(response)
-        console.log('Registration successful:', response);
         router.push('/login');
       } 
     } catch (error) {

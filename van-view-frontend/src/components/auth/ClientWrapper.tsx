@@ -1,7 +1,7 @@
 "use client";
 
 import { authStore } from "@/lib/store/authStore";
-import React from "react";
+import React, { useEffect } from "react";
 
 type ClientWrapperProps = {
   children: React.ReactNode;
@@ -10,13 +10,18 @@ type ClientWrapperProps = {
 export default function ClientWrapper({ children }: ClientWrapperProps) {
   const setLoggedIn = authStore((state) => state.setLoggedIn);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkLogin = async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
           {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
             credentials: "include",
+            cache: "no-store",
           }
         );
 

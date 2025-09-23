@@ -29,7 +29,6 @@ export default function LoginForm() {
         setServerError(error.message);
       } else {
         setLoggedIn(true);
-        console.log("Account loggedIn successful:", response);
         router.push("/dashboard");
       }
     } catch (error) {
