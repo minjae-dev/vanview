@@ -53,3 +53,13 @@ export const logout = async () => {
   );
   return response.json();
 };
+
+export const getBusinesses = async (limit: number, offset: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_OPEN_DATA_URL}?limit=${limit}&offset=${offset}`,
+    {
+      method: "GET",
+    }
+  );
+  return response.json();
+};
