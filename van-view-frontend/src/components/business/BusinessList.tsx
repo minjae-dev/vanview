@@ -1,48 +1,11 @@
 "use client";
 
+import { Businesses } from "@/lib/type";
 import { useEffect, useState } from "react";
 import BusinessCard from "./BusinessCard";
 
-export interface BusinessLicense {
-  folderyear: string;
-  licencersn: string;
-  licencenumber: string;
-  licencerevisionnumber: string;
-  businessname: string;
-  businesstradename: string | null;
-  status: string;
-  issueddate: string;
-  expireddate: string;
-  businesstype: string;
-  businesssubtype: string | null;
-  unit: string | null;
-  unittype: string | null;
-  house: string | null;
-  street: string | null;
-  city: string;
-  province: string;
-  country: string;
-  postalcode: string | null;
-  localarea: string;
-  numberofemployees: number;
-  feepaid: string | null;
-  extractdate: string;
-  geom: {
-    type: string;
-    geometry: {
-      type: string;
-      coordinates: [number, number];
-    };
-    properties: object;
-  } | null;
-  geo_point_2d: {
-    lat: number;
-    lon: number;
-  } | null;
-}
-
 interface BusinessListProps {
-  businesses: BusinessLicense[];
+  businesses: Businesses[];
   isLoading?: boolean;
   error?: string | null;
 }
@@ -56,7 +19,7 @@ export default function BusinessList({
 }: BusinessListProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("detailed");
   const [filteredBusinesses, setFilteredBusinesses] =
-    useState<BusinessLicense[]>(businesses);
+    useState<Businesses[]>(businesses);
   const [searchTerm, setSearchTerm] = useState("");
 
   // businesses prop이 변경될 때마다 filteredBusinesses 업데이트
