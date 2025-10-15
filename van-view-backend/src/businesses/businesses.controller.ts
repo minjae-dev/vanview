@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
+import { BusinessSubcategory } from 'src/enums/enums';
 import { BusinessesService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { UpdateBusinessDto } from './dto/update-business.dto';
@@ -13,8 +24,31 @@ export class BusinessesController {
   }
 
   @Get()
-  findAll() {
-    return this.businessesService.findAll();
+  @ApiQuery({ name: 'limit', required: true, type: Number })
+  @ApiQuery({ name: 'offset', required: true, type: Number })
+  @ApiQuery({ name: 'category', required: false, type: String })
+  // 허용된 카테고리 목록
+  // businessCategory enum 타입을 Swagger에 노출
+  @ApiQuery({
+    name: 'category',
+    required: false,
+    enum: Object.values(BusinessSubcategory),
+    description: 'Business category (enum)',
+  })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  findBusinesses(
+    @Query('limit') limit: number,
+    @Query('offset') offset: number,
+    @Query('category') category?: string,
+    @Query('search') search?: string,
+  ) {
+    console.log({ limit, offset, category, search });
+    return this.businessesService.findBusinesses(
+      limit,
+      offset,
+      category,
+      search,
+    );
   }
 
   @Get(':id')
@@ -23,7 +57,10 @@ export class BusinessesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBusinessDto: UpdateBusinessDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateBusinessDto: UpdateBusinessDto,
+  ) {
     return this.businessesService.update(+id, updateBusinessDto);
   }
 
