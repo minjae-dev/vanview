@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BusinessesModule } from './businesses/businesses.module';
+import { DropListItemsModule } from './drop-list-items/drop-list-items.module';
+import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -32,6 +34,8 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     BusinessesModule,
+    DropListItemsModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

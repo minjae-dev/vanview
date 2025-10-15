@@ -23,16 +23,16 @@ async function bootstrap() {
       'access-token',
     )
     .build();
-    const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config);
 
-    SwaggerModule.setup('api', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
-        requestInterceptor: (req) => {
-          req.credentials = 'include';
-          return req;
-        },
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      requestInterceptor: (req) => {
+        req.credentials = 'include';
+        return req;
       },
+    },
   });
 
   app.useGlobalPipes(
@@ -49,7 +49,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser()); // 추가
-  
+
   await app.listen(process.env.PORT);
 }
 bootstrap();

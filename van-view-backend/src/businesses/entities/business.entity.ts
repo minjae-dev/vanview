@@ -1,10 +1,13 @@
+import { DropListItems } from 'src/drop-list-items/entities/drop-list-item.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Reviews } from '../../reviews/entities/review.entity';
 import { BusinessType } from './businessType.entity';
 
 interface Address {
@@ -154,4 +157,10 @@ export class Business {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToMany(() => Reviews, (review) => review.business)
+  reviews: Reviews[];
+
+  @OneToMany(() => DropListItems, (dropListItem) => dropListItem.business)
+  dropListItems: DropListItems[];
 }

@@ -42,3 +42,33 @@ export enum BusinessSubcategory {
   COFFEE_SHOP = 'Coffee Shop',
   TEA_HOUSE = 'Tea House',
 }
+
+export enum ReviewType {
+  INTERVIEW = 'interview',
+  WORK = 'work',
+}
+
+export enum ReviewTag {
+  FRIENDLY_STAFF = 'Friendly Staff',
+  GOOD_BENEFITS = 'Good Benefits',
+  WORK_LIFE_BALANCE = 'Work-Life Balance',
+  FLEXIBLE_SCHEDULE = 'Flexible Schedule',
+  OPPORTUNITIES_FOR_GROWTH = 'Opportunities for Growth',
+  INCLUSIVE_ENVIRONMENT = 'Inclusive Environment',
+  PHYSICALLY_DEMANDING = 'Physically Demanding',
+}
+
+export enum DropListItemState {
+  TO_VISIT = 'To Visit',
+  DROPPED = 'Dropped',
+  INTERVIEWED = 'Interviewed',
+  HIRED = 'Hired',
+  NOT_PURSUING = 'Not Pursuing',
+}
+
+export enum DropListItemMethod {
+  IN_PERSON = 'in-person',
+  EMAIL = 'email',
+  PHONE = 'phone',
+  ONLINE = 'online',
+}
