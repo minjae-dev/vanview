@@ -1,5 +1,6 @@
 import ProfileBody from "./components/ProfileBody";
 import ProfileHeader from "./components/ProfileHeader";
+import ProfileToDroplist from "./components/ProfileToDroplist";
 
 export default function page() {
   return (
@@ -11,6 +12,7 @@ export default function page() {
         email="email@something.com"
       />
       <ProfileBody />
+      <ProfileToDroplist />
     </div>
   );
 }
