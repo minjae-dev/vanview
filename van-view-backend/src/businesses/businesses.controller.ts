@@ -11,6 +11,7 @@ import {
 import { ApiQuery } from '@nestjs/swagger';
 import { BusinessSubcategory } from 'src/enums/enums';
 import { BusinessesService } from './businesses.service';
+import { BusinessDto } from './dto/business.dto';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { UpdateBusinessDto } from './dto/update-business.dto';
 
@@ -41,8 +42,7 @@ export class BusinessesController {
     @Query('offset') offset: number,
     @Query('category') category?: string,
     @Query('search') search?: string,
-  ) {
-    console.log({ limit, offset, category, search });
+  ): Promise<BusinessDto[]> {
     return this.businessesService.findBusinesses(
       limit,
       offset,
