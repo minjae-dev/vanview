@@ -49,10 +49,11 @@ export class Business {
     type: 'enum',
     enum: ['1-5', '6-20', '21-50', '50+'],
     nullable: true,
+    name: 'head_count',
   })
   headCount?: '1-5' | '6-20' | '21-50' | '50+';
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int', default: 0, name: 'number_of_employees' })
   numberOfEmployees: number;
 
   // Vancouver Open Data specific fields
