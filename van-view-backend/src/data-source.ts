@@ -8,6 +8,7 @@ const configService = new ConfigService();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
+  url: configService.get('DATABASE_URL') || undefined,
   host: configService.get('DB_HOST') || 'localhost',
   port: +configService.get('DB_PORT') || 5432,
   username: configService.get('DB_USERNAME') || 'postgres',
@@ -17,4 +18,8 @@ export const AppDataSource = new DataSource({
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false,
   logging: true,
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
 });

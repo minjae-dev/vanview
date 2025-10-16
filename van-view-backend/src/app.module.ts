@@ -19,15 +19,20 @@ import { UsersModule } from './users/users.module';
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get<string>('DB_HOST') || 'localhost', // 데이터베이스 호스트
-        port: +config.get<number>('DB_PORT') || 5432, // 데이터베이스 포트
-        username: config.get<string>('DB_USERNAME') || 'postgres', // 데이터베이스 사용자 이름
-        password: config.get<string>('DB_PASSWORD') || 'postgres', // 데이터베이스 비밀번호
-        database: config.get<string>('DB_NAME') || 'vanview', // 데이터베이스 이름
+        url: config.get<string>('DB_URL') || undefined,
+        host: config.get<string>('DB_HOST') || 'localhost',
+        port: +config.get<number>('DB_PORT') || 5432,
+        username: config.get<string>('DB_USER') || 'postgres',
+        password: config.get<string>('DB_PASSWORD') || 'postgres',
+        database: config.get<string>('DB_NAME') || 'vanview',
         autoLoadEntities: true,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // 개발 환경에서만 true로 설정 (운영 환경에서는 false 권장)
-        logging: true,
+        synchronize: false, // 운영 환경에서는 false로 설정
+        logging: process.env.NODE_ENV !== 'production',
+        ssl:
+          process.env.NODE_ENV === 'production'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
       inject: [ConfigService],
     }),
