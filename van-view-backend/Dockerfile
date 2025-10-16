@@ -3,6 +3,9 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+# Cache buster - force fresh build
+ARG CACHEBUST=1
+
 # Copy package files
 COPY package*.json ./
 RUN npm ci && npm cache clean --force

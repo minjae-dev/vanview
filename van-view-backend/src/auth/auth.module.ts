@@ -19,15 +19,13 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        return {
-          secret:
-            configService.get<string>('JWT_SECRET') || 'fallback-secret-key',
-          signOptions: {
-            expiresIn: '24h',
-          },
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        secret:
+          configService.get<string>('JWT_SECRET') || 'fallback-secret-key',
+        signOptions: {
+          expiresIn: 86400, // 24 hours in seconds
+        },
+      }),
     }),
     UsersModule,
   ],

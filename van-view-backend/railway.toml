@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install && npm run build"
+buildCommand = "rm -rf node_modules && rm -rf dist && npm install && npm run build"
 
 [deploy]
 startCommand = "npm run start:prod"
