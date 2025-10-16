@@ -1,12 +1,12 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files first for better caching
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production=false && npm cache clean --force
+# Install ALL dependencies (including dev dependencies for build)
+RUN npm install && npm cache clean --force
 
 # Copy source code
 COPY . .
@@ -14,7 +14,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies
+# Remove dev dependencies after build
 RUN npm prune --production
 
 # Create non-root user
