@@ -8,18 +8,16 @@ const configService = new ConfigService();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  url: configService.get('DATABASE_URL') || undefined,
-  host: configService.get('DB_HOST') || 'localhost',
+  url: configService.get('DB_URL') || undefined,
   port: +configService.get('DB_PORT') || 5432,
   username: configService.get('DB_USERNAME') || 'postgres',
   password: configService.get('DB_PASSWORD') || 'postgres',
-  database: configService.get('DB_NAME') || 'vanview',
+  database: configService.get('DB_NAME') || 'postgres',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false,
   logging: true,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
-      : false,
+  ssl: configService.get('DB_URL')?.includes('supabase.com')
+    ? { rejectUnauthorized: false }
+    : false,
 });
