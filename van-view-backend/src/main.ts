@@ -55,6 +55,5 @@ async function bootstrap() {
 
   console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📖 Swagger documentation: http://localhost:${port}/api`);
-  console.log(`❤️ Health check: http://localhost:${port}/health`);
 }
 bootstrap();
