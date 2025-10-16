@@ -13,10 +13,10 @@ export class User {
   @Column({ nullable: true })
   password: string;
 
-  @Column()
+  @Column({ name: 'first_name', nullable: true })
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'last_name', nullable: true })
   lastName: string;
 
   @OneToMany(() => Reviews, (review) => review.user)

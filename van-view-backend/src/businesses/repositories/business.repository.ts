@@ -35,26 +35,26 @@ export class BusinessRepository extends Repository<Business> {
     const businessDto: BusinessDto[] = businesses.map((business: Business) => ({
       id: business.id.toString(),
       name: business.name,
-      category: business.businessType ?? business.businessSubtype,
+      category: business.business_type ?? business.business_subtype,
       address: {
         unit: business.unit,
         house: business.house,
         street: business.street,
         city: business.city,
         province: business.province,
-        postal_code: business.postalCode,
+        postal_code: business.postal_code,
         country: business.country,
-        local_area: business.localArea,
+        local_area: business.local_area,
       },
       geo: {
         lat: business.latitude,
         lng: business.longitude,
       },
-      headcount_range: business.headCount,
+      headcount_range: business.head_count,
       status:
         business.status?.toLowerCase() === 'issued' ? 'active' : 'inactive',
-      created_at: business.createdAt?.toISOString(),
-      updated_at: business.updatedAt?.toISOString(),
+      created_at: business.created_at?.toISOString(),
+      updated_at: business.updated_at?.toISOString(),
     }));
     return businessDto;
   }

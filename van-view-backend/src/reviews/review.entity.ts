@@ -1,5 +1,6 @@
 import { Business } from 'src/businesses/entities/business.entity';
 import { ReviewTag, ReviewType } from 'src/enums/enums';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -8,7 +9,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './../../users/entities/user.entity';
 
 export interface InterviewReview {
   questionsAsked?: string;
