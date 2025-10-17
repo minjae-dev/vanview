@@ -4,7 +4,7 @@ export interface APIResponse<T> {
   statusCode: number;
 }
 
-const ApiResponse = <T>(
+const createApiResponse = <T>(
   data: T | null,
   message: string,
   statusCode: number,
@@ -15,4 +15,4 @@ const ApiResponse = <T>(
     statusCode,
   };
 };
-export default ApiResponse;
+export default createApiResponse;

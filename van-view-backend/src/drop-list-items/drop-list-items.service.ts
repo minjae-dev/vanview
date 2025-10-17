@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { APIResponse } from 'src/api/APIResponse';
+import { APIResponse } from 'src/api/apiResponse';
 import { DropListItemState } from 'src/enums/enums';
 import { DropListItemsRepository } from './drop-list-items.repository';
 import { CreateDropListItemDto } from './dto/create-drop-list-item.dto';

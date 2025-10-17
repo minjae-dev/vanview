@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import ApiResponse, { APIResponse } from 'src/api/apiResponse';
+import createApiResponse, { APIResponse } from 'src/api/apiResponse';
 import { DropListItemState } from 'src/enums/enums';
 import { DataSource, Repository } from 'typeorm';
 import { CreateDropListItemDto } from './dto/create-drop-list-item.dto';
@@ -15,16 +15,20 @@ export class DropListItemsRepository extends Repository<DropListItems> {
   ): Promise<APIResponse<DropListItems[] | null>> {
     try {
       if (!userId) {
-        return ApiResponse(null, 'User ID is required', 404);
+        return createApiResponse(null, 'User ID is required', 404);
       }
       const dropList = await this.createQueryBuilder('dropListItem')
         .where('dropListItem.user_id = :userId', { userId })
         .getMany();
 
-      return ApiResponse(dropList, 'DropListItems retrieved successfully', 200);
+      return createApiResponse(
+        dropList,
+        'DropListItems retrieved successfully',
+        200,
+      );
     } catch (error) {
       console.error('Error fetching DropListItems items:', error);
-      return ApiResponse(null, 'Failed to fetch DropListItems', 500);
+      return createApiResponse(null, 'Failed to fetch DropListItems', 500);
     }
   }
 
@@ -41,7 +45,7 @@ export class DropListItemsRepository extends Repository<DropListItems> {
         .getOne();
 
       if (existingItem) {
-        return ApiResponse(
+        return createApiResponse(
           null,
           'Business already exists in your dropList',
           400,
@@ -55,14 +59,14 @@ export class DropListItemsRepository extends Repository<DropListItems> {
       });
 
       const savedItem = await this.save(dropListItem);
-      return ApiResponse(
+      return createApiResponse(
         savedItem,
         'Business added to dropList successfully',
         201,
       );
     } catch (error) {
       console.error('Error creating dropList item:', error);
-      return ApiResponse(null, 'Failed to add business to dropList', 500);
+      return createApiResponse(null, 'Failed to add business to dropList', 500);
     }
   }
 
@@ -77,20 +81,20 @@ export class DropListItemsRepository extends Repository<DropListItems> {
       });
 
       if (!item) {
-        return ApiResponse(null, 'DropListItem not found', 404);
+        return createApiResponse(null, 'DropListItem not found', 404);
       }
 
       Object.assign(item, updateDropListItemDto);
       const updatedItem = await this.save(item);
 
-      return ApiResponse(
+      return createApiResponse(
         updatedItem,
         'Droplist item updated successfully',
         200,
       );
     } catch (error) {
       console.error('Error updating droplist item:', error);
-      return ApiResponse(null, 'Failed to update droplist item', 500);
+      return createApiResponse(null, 'Failed to update droplist item', 500);
     }
   }
 
@@ -102,11 +106,11 @@ export class DropListItemsRepository extends Repository<DropListItems> {
       const { ids, status } = bulkUpdateDto;
 
       if ((!ids || ids.length === 0) && (!status || status.length === 0)) {
-        return ApiResponse(null, 'No IDs provided for bulk update', 400);
+        return createApiResponse(null, 'No IDs provided for bulk update', 400);
       }
 
       if (status.length !== ids.length) {
-        return ApiResponse(
+        return createApiResponse(
           null,
           'Status array length must match IDs array length',
           400,
@@ -119,11 +123,11 @@ export class DropListItemsRepository extends Repository<DropListItems> {
         .getMany();
 
       if (items.length === 0) {
-        return ApiResponse(null, 'No matching DropListItems found', 404);
+        return createApiResponse(null, 'No matching DropListItems found', 404);
       }
 
       if (items.length !== ids.length) {
-        return ApiResponse(
+        return createApiResponse(
           null,
           'Some DropListItems not found for the provided IDs',
           404,
@@ -137,10 +141,10 @@ export class DropListItemsRepository extends Repository<DropListItems> {
       }
 
       const updatedItems = await this.save(items);
-      return ApiResponse(updatedItems, 'Bulk update successful', 200);
+      return createApiResponse(updatedItems, 'Bulk update successful', 200);
     } catch (error) {
       console.error('Error performing bulk update:', error);
-      return ApiResponse(null, 'Failed to perform bulk update', 500);
+      return createApiResponse(null, 'Failed to perform bulk update', 500);
     }
   }
 
@@ -150,14 +154,14 @@ export class DropListItemsRepository extends Repository<DropListItems> {
         where: { id, user: { id: userId } },
       });
       if (!item) {
-        return ApiResponse(null, 'DropListItem not found', 404);
+        return createApiResponse(null, 'DropListItem not found', 404);
       }
 
       await this.remove(item);
-      return ApiResponse(null, 'Droplist item deleted successfully', 200);
+      return createApiResponse(null, 'Droplist item deleted successfully', 200);
     } catch (error) {
       console.error('Error deleting droplist item:', error);
-      return ApiResponse(null, 'Failed to delete droplist item', 500);
+      return createApiResponse(null, 'Failed to delete droplist item', 500);
     }
   }
 }

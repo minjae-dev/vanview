@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import ApiResponse, { APIResponse } from 'src/api/apiResponse';
+import createApiResponse, { APIResponse } from 'src/api/apiResponse';
 import { DataSource, Repository } from 'typeorm';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -18,7 +18,11 @@ export class ReviewsRepository extends Repository<Reviews> {
       createReviewDto;
     try {
       if (!userId || !businessId) {
-        return ApiResponse(null, 'User ID and Business ID are required', 404);
+        return createApiResponse(
+          null,
+          'User ID and Business ID are required',
+          404,
+        );
       }
 
       const existedReview = await this.findBy({
@@ -28,7 +32,7 @@ export class ReviewsRepository extends Repository<Reviews> {
       });
 
       if (existedReview) {
-        return ApiResponse(null, 'Review already exists', 400);
+        return createApiResponse(null, 'Review already exists', 400);
       }
 
       const review = this.create({
@@ -40,14 +44,14 @@ export class ReviewsRepository extends Repository<Reviews> {
         tags,
       });
       if (!review) {
-        return ApiResponse(null, 'Failed to create review entity', 500);
+        return createApiResponse(null, 'Failed to create review entity', 500);
       } else {
         await this.save(review);
-        return ApiResponse(review, 'Review created successfully', 201);
+        return createApiResponse(review, 'Review created successfully', 201);
       }
     } catch (error) {
       console.error('Error creating review:', error);
-      return ApiResponse(null, 'Failed to create review', 500);
+      return createApiResponse(null, 'Failed to create review', 500);
     }
   }
 
@@ -80,13 +84,18 @@ export class ReviewsRepository extends Repository<Reviews> {
         .limit(limit || 10)
         .getMany();
 
-      if (!businessReviews) return ApiResponse(null, 'No reviews found', 404);
+      if (!businessReviews)
+        return createApiResponse(null, 'No reviews found', 404);
     } catch (error) {
       console.error('Error fetching reviews by business ID:', error);
-      return ApiResponse(businessReviews, 'Failed to fetch reviews', 200);
+      return createApiResponse(businessReviews, 'Failed to fetch reviews', 200);
     }
 
-    return ApiResponse(businessReviews, 'Reviews successfully fetched', 200);
+    return createApiResponse(
+      businessReviews,
+      'Reviews successfully fetched',
+      200,
+    );
   }
 
   async updateReview(
@@ -102,14 +111,14 @@ export class ReviewsRepository extends Repository<Reviews> {
         .getOne();
 
       if (!review) {
-        return ApiResponse(null, 'Review not found', 404);
+        return createApiResponse(null, 'Review not found', 404);
       }
       Object.assign(review, updateReviewDto);
       await this.save(review);
-      return ApiResponse(review, 'Review updated successfully', 200);
+      return createApiResponse(review, 'Review updated successfully', 200);
     } catch (error) {
       console.error('Error updating review:', error);
-      return ApiResponse(null, 'Failed to update review', 500);
+      return createApiResponse(null, 'Failed to update review', 500);
     }
   }
 
@@ -123,14 +132,14 @@ export class ReviewsRepository extends Repository<Reviews> {
         },
       });
       if (!review) {
-        return ApiResponse(null, 'Review not found', 404);
+        return createApiResponse(null, 'Review not found', 404);
       }
       review.isDeleted = true;
       await this.save(review);
-      return ApiResponse(null, 'Review deleted successfully', 200);
+      return createApiResponse(null, 'Review deleted successfully', 200);
     } catch (error) {
       console.error('Error deleting review:', error);
-      return ApiResponse(null, 'Failed to delete review', 500);
+      return createApiResponse(null, 'Failed to delete review', 500);
     }
   }
 }
