@@ -103,5 +103,5 @@ export class CreateReviewDto {
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
-  tags?: ReviewTag[];
+  tags?: string[];
 }

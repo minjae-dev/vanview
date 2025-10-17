@@ -1,73 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import ApiResponse, { APIResponse } from 'src/api/apiResponse';
-import { Repository } from 'typeorm/repository/Repository.js';
+import { APIResponse } from 'src/api/apiResponse';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { Reviews } from './entities/review.entity';
+import { ReviewsRepository } from './reviews.repository';
 
 @Injectable()
 export class ReviewsService {
-  constructor(
-    @InjectRepository(Reviews)
-    private readonly reviewsRepository: Repository<Reviews>,
-  ) {}
+  constructor(private readonly reviewsRepository: ReviewsRepository) {}
 
   async create(
     createReviewDto: CreateReviewDto,
     userId: number,
   ): Promise<APIResponse<Reviews | null>> {
-    const { businessId, reviewType, interviewReview, workReview, tags } =
-      createReviewDto;
-    try {
-      if (!userId || !businessId) {
-        return ApiResponse(null, 'User ID and Business ID are required', 404);
-      }
-
-      const existedReview = await this.reviewsRepository.findBy({
-        user: userId ? { id: userId } : null,
-        business: businessId ? { id: businessId } : null,
-        isDeleted: false,
-      });
-
-      if (existedReview) {
-        return ApiResponse(null, 'Review already exists', 400);
-      }
-
-      const review = this.reviewsRepository.create({
-        type: reviewType,
-        interviewReview,
-        workReview,
-        user: { id: userId },
-        business: { id: businessId },
-        tags,
-      });
-      if (!review) {
-        return ApiResponse(null, 'Failed to create review entity', 500);
-      } else {
-        await this.reviewsRepository.save(review);
-
-        return ApiResponse(review, 'Review created successfully', 201);
-      }
-    } catch (error) {
-      console.error('Error creating review:', error);
-      return ApiResponse(null, 'Failed to create review', 500);
-    }
+    return this.reviewsRepository.createReview(createReviewDto, userId);
   }
 
-  findAll() {
-    return `This action returns all reviews`;
+  async findOne(
+    businessId: number,
+    keyword: string,
+    offset: number,
+    limit: number,
+  ): Promise<APIResponse<Reviews[] | null>> {
+    return await this.reviewsRepository.findByBusinessId(
+      businessId,
+      keyword,
+      offset,
+      limit,
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
+  async update(
+    reviewId: number,
+    updateReviewDto: UpdateReviewDto,
+    userId: number,
+  ) {
+    return await this.reviewsRepository.updateReview(
+      reviewId,
+      updateReviewDto,
+      userId,
+    );
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  remove(reviewId: number, userId: number) {
+    return this.reviewsRepository.removeReview(reviewId, userId);
   }
 }

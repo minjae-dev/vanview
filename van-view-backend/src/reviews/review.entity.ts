@@ -1,5 +1,5 @@
 import { Business } from 'src/businesses/entities/business.entity';
-import { ReviewTag, ReviewType } from 'src/enums/enums';
+import { ReviewType } from 'src/enums/enums';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -75,8 +75,8 @@ export class Reviews {
   @Column({ default: false })
   isDeleted: boolean;
 
-  @Column({ nullable: true, type: 'enum', enum: ReviewTag, array: true })
-  tags?: ReviewTag[];
+  @Column({ nullable: true, type: 'text', array: true })
+  tags?: string[];
 
   @Column({ default: 0 })
   likes: number;
