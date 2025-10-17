@@ -18,13 +18,13 @@ export class ReviewsService {
 
   async findOne(
     businessId: number,
-    keyword: string,
+    search: string,
     offset: number,
     limit: number,
   ): Promise<APIResponse<Reviews[] | null>> {
     return await this.reviewsRepository.findByBusinessId(
       businessId,
-      keyword,
+      search,
       offset,
       limit,
     );

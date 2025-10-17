@@ -40,10 +40,10 @@ export class DropListItems {
   })
   method: DropListItemMethod;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', nullable: true, name: 'planned_drop_date' })
   plannedDropDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', nullable: true, name: 'actual_drop_date' })
   actualDropDate: Date;
 
   @Column({ type: 'text', nullable: true })

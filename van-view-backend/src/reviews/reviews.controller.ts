@@ -59,10 +59,10 @@ export class ReviewsController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiParam({ name: 'businessId', type: Number })
   @ApiQuery({
-    name: 'keyword',
+    name: 'search',
     required: false,
     type: String,
-    description: 'Search keyword',
+    description: 'Search search',
   })
   @ApiQuery({
     name: 'offset',
@@ -78,13 +78,13 @@ export class ReviewsController {
   })
   async findOne(
     @Param('businessId') businessId: string,
-    @Query('keyword') keyword: string,
+    @Query('search') search: string,
     @Query('offset') offset: number,
     @Query('limit') limit: number,
   ) {
     return await this.reviewsService.findOne(
       +businessId,
-      keyword,
+      search,
       offset,
       limit,
     );

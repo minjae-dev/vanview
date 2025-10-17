@@ -30,9 +30,6 @@ export class Business {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'name', nullable: true, length: 500 })
-  name: string;
-
   @ManyToOne(() => BusinessType, (businessType) => businessType.businesses, {
     nullable: true,
   })

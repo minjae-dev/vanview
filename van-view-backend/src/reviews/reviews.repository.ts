@@ -53,7 +53,7 @@ export class ReviewsRepository extends Repository<Reviews> {
 
   async findByBusinessId(
     businessId: number,
-    keyword: string,
+    search: string,
     offset: number,
     limit: number,
   ): Promise<APIResponse<Reviews[] | null>> {
@@ -61,11 +61,11 @@ export class ReviewsRepository extends Repository<Reviews> {
     try {
       let query = await this.createQueryBuilder('reviews');
 
-      if (keyword) {
+      if (search) {
         query = query.andWhere(
-          'reviews.interviewReview LIKE :keyword OR reviews.workReview LIKE :keyword',
+          'reviews.interviewReview LIKE :search OR reviews.workReview LIKE :search',
           {
-            keyword: `%${keyword}%`,
+            search: `%${search}%`,
           },
         );
       }
@@ -95,13 +95,12 @@ export class ReviewsRepository extends Repository<Reviews> {
     userId: number,
   ): Promise<APIResponse<Reviews | null>> {
     try {
-      const review = await this.findOne({
-        where: {
-          user: { id: userId },
-          id: reviewId,
-          isDeleted: false,
-        },
-      });
+      const review = await this.createQueryBuilder('reviews')
+        .where('reviews.id = :reviewId', { reviewId })
+        .andWhere('reviews.user_id = :userId', { userId })
+        .andWhere('reviews.isDeleted = false')
+        .getOne();
+
       if (!review) {
         return ApiResponse(null, 'Review not found', 404);
       }

@@ -19,22 +19,33 @@ export class BusinessRepository extends Repository<Business> {
 
     if (category) {
       queryBuilder.andWhere(
-        `business.business_type = :category
-            OR
+        `business.business_type = :category OR
             business.business_subtype = :category`,
         { category },
       );
     }
 
     if (search) {
-      queryBuilder.andWhere('business.name ILIKE :search', {
-        search: `%${search}%`,
-      });
+      queryBuilder.andWhere(
+        `business.business_name ILIKE :search OR 
+         business.business_trade_name ILIKE :search OR
+         business.local_area ILIKE :search OR
+         business.street ILIKE :search OR
+         business.city ILIKE :search OR
+         business.province ILIKE :search OR
+         business.postal_code ILIKE :search OR
+         business.country ILIKE :search OR
+         business.business_type ILIKE :search OR
+         business.business_subtype ILIKE :search`,
+        {
+          search: `%${search}%`,
+        },
+      );
     }
     const businesses = await queryBuilder.take(limit).skip(offset).getMany();
     const businessDto: BusinessDto[] = businesses.map((business: Business) => ({
       id: business.id.toString(),
-      name: business.name,
+      name: business.business_name,
       category: business.business_type ?? business.business_subtype,
       address: {
         unit: business.unit,
